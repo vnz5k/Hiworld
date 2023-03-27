@@ -1,0 +1,16 @@
+<?php
+      // Datos de conexión a la base de datos
+      $host = "192.168.1.100"; // Cambia esto por la dirección IP o el nombre de dominio del servidor MySQL
+      $user = "usuario"; // Nombre de usuario de la base de datos
+      $password = "contraseña"; // Contraseña de la base de datos
+      $dbname = "basedatos"; // Nombre de la base de datos
+      
+      // Conexión a la base de datos
+      $conn = mysqli_connect($host, $user, $password, $dbname);
+      
+      // Verificación de la conexión a la base de datos
+      if (!$conn) {
+            die("No se pudo conectar a la base de datos: " . mysqli_connect_error());
+      }
+      echo "Conexión exitosa";
+?>
