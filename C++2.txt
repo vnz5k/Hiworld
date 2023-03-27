@@ -1,0 +1,36 @@
+#include <stdio.h>
+#include <stdbool.h>
+
+#define MAX_SIZE 100
+
+int lista[MAX_SIZE];
+int anterior[MAX_SIZE];
+int siguiente[MAX_SIZE];
+int primero = -1;
+int ultimo = -1;
+int n = 0;
+
+void insertarNodo();
+void buscarNodo();
+void modificarNodo();
+void eliminarNodo();
+void desplegarListaPU();
+
+int main() {
+    // ... (código anterior, no se muestra para ahorrar espacio) ...
+}
+
+// ... (funciones insertarNodo, buscarNodo, modificarNodo, eliminarNodo no se muestran para ahorrar espacio) ...
+
+void desplegarListaPU() {
+    if (primero != -1) {
+        printf("\n Elemento | Anterior | Siguiente");
+        int actual = primero;
+        do {
+            printf("\n %8d | %8d | %8d", lista[actual], anterior[actual] + 1, siguiente[actual] + 1);
+            actual = siguiente[actual];
+        } while (actual != primero);
+    } else {
+        printf("\n La Lista se encuentra vacia\n\n");
+    }
+}
