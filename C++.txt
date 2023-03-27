@@ -1,0 +1,191 @@
+#include <stdio.h>
+#include <stdbool.h>
+
+#define MAX_SIZE 100
+
+int lista[MAX_SIZE];
+int anterior[MAX_SIZE];
+int siguiente[MAX_SIZE];
+int primero = -1;
+int ultimo = -1;
+int n = 0;
+
+void insertarNodo();
+void buscarNodo();
+void modificarNodo();
+void eliminarNodo();
+void desplegarListaPU();
+
+int main() {
+    int opcionMenu = 0;
+    do {
+        printf("\n");
+        printf("\t       Menu ");
+        printf("\n 1--- Insertar");
+        printf("\n 2--- Buscar");
+        printf("\n 3--- Eliminar");
+        printf("\n 4--- Mostrar Lista");
+        printf("\n 7--- Modificar nodo");
+        printf("\n 5--- Salir");
+        printf("\n\n Escoja una Opcion: ");
+        scanf("%d", &opcionMenu);
+        printf("\n");
+        switch (opcionMenu) {
+            case 1:
+                insertarNodo();
+                break;
+            case 2:
+                buscarNodo();
+                break;
+            case 3:
+                eliminarNodo();
+                break;
+            case 4:
+                desplegarListaPU();
+                break;
+            case 5:
+                printf("\n\n Cerrando Programa...");
+                break;
+            case 7:
+                modificarNodo();
+                break;
+            default:
+                printf("\n\n Opcion No Valida \n\n");
+        }
+    } while (opcionMenu != 5);
+    return 0;
+}
+
+void insertarNodo() {
+    if (n < MAX_SIZE) {
+        int nuevo;
+        printf("\n \n");
+        printf(" Ingrese el nuevo Nodo: ");
+        scanf("%d", &nuevo);
+
+        if (primero == -1) {
+            primero = 0;
+            ultimo = 0;
+            lista[0] = nuevo;
+            siguiente[0] = 0;
+            anterior[0] = 0;
+        } else {
+            int pos = n;
+            lista[pos] = nuevo;
+            siguiente[pos] = primero;
+            anterior[pos] = ultimo;
+            siguiente[ultimo] = pos;
+            anterior[primero] = pos;
+            ultimo = pos;
+        }
+        n++;
+        printf("\n Nodo Ingresado\n\n");
+    } else {
+        printf("\n Lista llena, no se puede insertar un nuevo nodo\n\n");
+    }
+}
+
+void buscarNodo() {
+    int nodoBuscado, encontrado = -1;
+    printf("\n \n");
+    printf(" Ingrese el dato del nodo que desea  buscar: ");
+    scanf("%d", &nodoBuscado);
+
+    if (primero != -1) {
+        int actual = primero;
+        do {
+            if (lista[actual] == nodoBuscado) {
+                encontrado = actual;
+                break;
+            }
+            actual = siguiente[actual];
+        } while (actual != primero);
+    }
+
+    if (encontrado != -1) {
+        printf("\n Nodo con el dato ( %d ) Encontrado\n\n", nodoBuscado);
+    } else {
+        printf("\n Nodo no Encontrado\n\n");
+    }
+}
+
+void modificarNodo() {
+    int nodoBuscado, encontrado = -1;
+    printf(" Ingrese el dato del nodo a Buscar para Modificar: ");
+    scanf("%d", &nodoBuscado);
+
+    if (primero != -1) {
+        int actual = primero;
+        do {
+            if (lista[actual] == nodoBuscado) {
+                encontrado = actual;
+                break;
+            }
+            actual = siguiente[actual];
+        } while (actual != primero);
+    }
+
+    if (encontrado != -1) {
+        printf("\n Nodo con el dato ( %d ) Encontrado", nodoBuscado);
+        printf("\n Ingrese el nuevo dato para este Nodo: ");
+        scanf("%d", &lista[encontrado]);
+        printf("\n Nodo Modificado\n\n");
+    } else {
+        printf("\n Nodo no Encontrado\n\n");
+    }
+}
+
+void eliminarNodo() {
+    int nodoBuscado, encontrado = -1;
+    printf("\n \n");
+    printf(" Ingrese el dato del nodo que va a eliminar: ");
+    scanf("%d", &nodoBuscado);
+
+    if (primero != -1) {
+        int actual = primero;
+        int prev = -1;
+        do {
+            if (lista[actual] == nodoBuscado) {
+                encontrado = actual;
+                break;
+            }
+            prev = actual;
+            actual = siguiente[actual];
+        } while (actual != primero);
+
+        if (encontrado != -1) {
+            if (n == 1) {
+                primero = -1;
+                ultimo = -1;
+            } else {
+                if (encontrado == primero) {
+                    primero = siguiente[primero];
+                }
+                if (encontrado == ultimo) {
+                    ultimo = prev;
+                }
+                siguiente[anterior[encontrado]] = siguiente[encontrado];
+                anterior[siguiente[encontrado]] = anterior[encontrado];
+            }
+            n--;
+            printf("\n El nodo ( %d ) fue eliminado\n\n", nodoBuscado);
+        } else {
+            printf("\n Nodo no Encontrado\n\n");
+        }
+    } else {
+        printf("\n La Lista se encuentra vacia\n\n");
+    }
+}
+
+void desplegarListaPU() {
+    if (primero != -1) {
+        int actual = primero;
+        do {
+            printf("\n %d", lista[actual]);
+            actual = siguiente[actual];
+        } while (actual != primero);
+    } else {
+        printf("\n La Lista se encuentra vacia\n\n");
+    }
+}
+
