@@ -1,0 +1,227 @@
+-- Crear modelo relacional (OLTP)
+CREATE TABLE Usuarios (
+    ID_Usuario INT PRIMARY KEY,
+    Nombre VARCHAR(50),
+    Apellido VARCHAR(50),
+    Correo VARCHAR(100),
+    Contraseña VARCHAR(100),
+    ID_Dirección INT
+);
+
+CREATE TABLE Empleados (
+    ID_Empleado INT PRIMARY KEY,
+    ID_Usuario INT FOREIGN KEY REFERENCES Usuarios(ID_Usuario)
+);
+
+CREATE TABLE Direcciones (
+    ID_Dirección INT PRIMARY KEY,
+    Dirección VARCHAR(100),
+    Ciudad VARCHAR(50),
+    Código_Postal VARCHAR(10),
+    Estado VARCHAR(50),
+    País VARCHAR(50)
+);
+
+CREATE TABLE Clientes (
+    ID_Cliente INT PRIMARY KEY,
+    Nombre VARCHAR(100),
+    ID_Dirección_Facturación INT FOREIGN KEY REFERENCES Direcciones(ID_Dirección),
+    ID_Dirección_Envío INT FOREIGN KEY REFERENCES Direcciones(ID_Dirección)
+);
+
+CREATE TABLE Productos (
+    ID_Producto INT PRIMARY KEY,
+    Nombre VARCHAR(100),
+    Descripción VARCHAR(255),
+    Precio DECIMAL(10, 2),
+    ID_Categoría INT,
+    Nombre_Categoría VARCHAR(50)
+);
+
+CREATE TABLE Facturas (
+    ID_Factura INT PRIMARY KEY,
+    Fecha DATE,
+    ID_Cliente INT FOREIGN KEY REFERENCES Clientes(ID_Cliente),
+    ID_Empleado INT FOREIGN KEY REFERENCES Empleados(ID_Empleado)
+);
+
+CREATE TABLE Detalle_Facturas (
+    ID_Detalle_Factura INT PRIMARY KEY,
+    ID_Factura INT FOREIGN KEY REFERENCES Facturas(ID_Factura),
+    ID_Producto INT FOREIGN KEY REFERENCES Productos(ID_Producto),
+    Cantidad INT,
+    Precio_Unitario DECIMAL(10, 2),
+    Total DECIMAL(10, 2)
+);
+
+-- Insertar registros en las tablas creadas (Mínimo 5 registros en cada entidad)
+-- Usuarios
+INSERT INTO Usuarios (ID_Usuario, Nombre, Apellido, Correo, Contraseña, ID_Dirección)
+VALUES
+(1, 'Sophia', 'Hinton', 'sophia@example.com', 'password1', 1),
+(2, 'Lucas', 'Gomez', 'lucas@example.com', 'password2', 2),
+(3, 'Olivia', 'Perez', 'olivia@example.com', 'password3', 3),
+(4, 'Mason', 'Sanchez', 'mason@example.com', 'password4', 4),
+(5, 'Ava', 'Rivera', 'ava@example.com', 'password5', 5);
+
+-- Empleados
+INSERT INTO Empleados (ID_Empleado, ID_Usuario)
+VALUES
+(1, 1),
+(2, 2),
+(3, 3),
+(4, 4),
+(5, 5);
+
+-- Direcciones
+INSERT INTO Direcciones (ID_Dirección, Dirección, Ciudad, Código_Postal, Estado, País)
+VALUES
+(1, '123 Main St', 'San Francisco', '94101', 'CA', 'USA'),
+(2, '456 Oak St', 'Los Angeles', '90001', 'CA', 'USA'),
+(3, '789 Pine St', 'New York', '10001', 'NY', 'USA'),
+(4, '321 Cedar St', 'Seattle', '98101', 'WA', 'USA'),
+(5, '654 Elm St', 'Chicago', '60601', 'IL', 'USA');
+
+-- Clientes
+INSERT INTO Clientes (ID_Cliente, Nombre, ID_Dirección_Facturación, ID_Dirección_Envío)
+VALUES
+(1, 'Tailspin Toys (Head Office)', 1, 1),
+(2, 'Gizmo Gadgets', 2, 2),
+(3, 'Toy Emporium', 3, 3),
+(4, 'Playtime Paradise', 4, 4),
+(5, 'Wonderland Toys', 5, 5);
+
+-- Productos
+INSERT INTO Productos (ID_Producto, Nombre, Descripción, Precio, ID_Categoría, Nombre_Categoría)
+VALUES
+(1, 'IT Joke Mug - That Behavior Is By Design (Black)', 'A funny IT joke mug', 13, 1, 'Electronics'),
+(2, '20 mm Double Sided Bubble Wrap 50m', 'Bubble wrap for packaging', 108, 2, 'Packaging Materials'),
+(3, 'The Gu Red Shirt XML Tag T-Shirt (White) 3XL', 'A white T-shirt with an XML tag', 18, 1, 'Electronics'),
+(4, 'Wireless Bluetooth Speaker', 'Portable speaker with Bluetooth connectivity', 50, 1, 'Electronics'),
+(5, 'Set of 5 Colorful Fidget Spinners', 'A set of 5 fidget spinners in various colors', 25, 3, 'Toys');
+
+-- Facturas
+INSERT INTO Facturas (ID_Factura, Fecha, ID_Cliente, ID_Empleado)
+VALUES
+(1, '2022-01-05', 1, 1),
+(2, '2022-02-12', 2, 2),
+(3, '2022-03-23', 3, 3),
+(4, '2022-04-15', 4, 4),
+(5, '2022-05-30', 5, 5);
+
+-- Detalle_Facturas
+INSERT INTO Detalle_Facturas (ID_Detalle_Factura, ID_Factura, ID_Producto, Cantidad, Precio_Unitario, Total)
+VALUES
+(1, 1, 1, 4, 13, 52),
+(2, 2, 2, 10, 108, 1080),
+(3, 3, 3, 12, 18, 216),
+(4, 4, 4, 6, 50, 300),
+(5, 5, 5, 5, 25, 125);
+
+-- Crear modelo Dimensional (OLAP)
+CREATE TABLE DimCliente (
+    ID_Cliente INT PRIMARY KEY,
+    Nombre VARCHAR(100)
+);
+
+CREATE TABLE DimProducto (
+    ID_Producto INT PRIMARY KEY,
+    Nombre VARCHAR(100),
+    Descripción VARCHAR(255),
+    Precio DECIMAL(10, 2),
+    ID_Categoría INT,
+    Nombre_Categoría VARCHAR(50)
+);
+
+CREATE TABLE DimEmpleado (
+    ID_Empleado INT PRIMARY KEY,
+    Nombre VARCHAR(50),
+    Apellido VARCHAR(50),
+    Correo VARCHAR(100)
+);
+
+CREATE TABLE DimFecha (
+    ID_Fecha INT PRIMARY KEY,
+    Fecha DATE,
+    Dia INT,
+    Mes INT,
+    Año INT
+);
+
+CREATE TABLE DimDireccion (
+    ID_Direccion INT PRIMARY KEY,
+    Direccion VARCHAR(100),
+    Ciudad VARCHAR(50),
+    Codigo_Postal VARCHAR(10),
+    Estado VARCHAR(50),
+    Pais VARCHAR(50)
+);
+
+CREATE TABLE FactVentas (
+    ID_FactVentas INT PRIMARY KEY,
+    ID_Cliente INT FOREIGN KEY REFERENCES DimCliente(ID_Cliente),
+    ID_Producto INT FOREIGN KEY REFERENCES DimProducto(ID_Producto),
+    ID_Empleado INT FOREIGN KEY REFERENCES DimEmpleado(ID_Empleado),
+    ID_Fecha INT FOREIGN KEY REFERENCES DimFecha(ID_Fecha),
+    ID_Direccion_Facturacion INT FOREIGN KEY REFERENCES DimDireccion(ID_Direccion),
+    ID_Direccion_Envio INT FOREIGN KEY REFERENCES DimDireccion(ID_Direccion),
+    Cantidad INT,
+    Precio_Unitario DECIMAL(10, 2),
+    Total DECIMAL(10, 2)
+);
+
+-- Insertar registros en el en las dimensiones y FactTable (Mínimo 5 registros)
+-- DimCliente
+INSERT INTO DimCliente (ID_Cliente, Nombre)
+VALUES
+(1, 'Tailspin Toys (Head Office)'),
+(2, 'Gizmo Gadgets'),
+(3, 'Toy Emporium'),
+(4, 'Playtime Paradise'),
+(5, 'Wonderland Toys');
+
+-- DimProducto
+INSERT INTO DimProducto (ID_Producto, Nombre, Descripción, Precio, ID_Categoría, Nombre_Categoría)
+VALUES
+(1, 'IT Joke Mug - That Behavior Is By Design (Black)', 'A funny IT joke mug', 13, 1, 'Electronics'),
+(2, '20 mm Double Sided Bubble Wrap 50m', 'Bubble wrap for packaging', 108, 2, 'Packaging Materials'),
+(3, 'The Gu Red Shirt XML Tag T-Shirt (White) 3XL', 'A white T-shirt with an XML tag', 18, 1, 'Electronics'),
+(4, 'Wireless Bluetooth Speaker', 'Portable speaker with Bluetooth connectivity', 50, 1, 'Electronics'),
+(5, 'Set of 5 Colorful Fidget Spinners', 'A set of 5 fidget spinners in various colors', 25, 3, 'Toys');
+
+-- DimEmpleado
+INSERT INTO DimEmpleado (ID_Empleado, Nombre, Apellido, Correo)
+VALUES
+(1, 'Sophia', 'Hinton', 'sophia@example.com'),
+(2, 'Lucas', 'Gomez', 'lucas@example.com'),
+(3, 'Olivia', 'Perez', 'olivia@example.com'),
+(4, 'Mason', 'Sanchez', 'mason@example.com'),
+(5, 'Ava', 'Rivera', 'ava@example.com');
+
+-- DimFecha
+INSERT INTO DimFecha (ID_Fecha, Fecha, Dia, Mes, Año)
+VALUES
+(1, '2022-01-05', 5, 1, 2022),
+(2, '2022-02-12', 12, 2, 2022),
+(3, '2022-03-23', 23, 3, 2022),
+(4, '2022-04-15', 15, 4, 2022),
+(5, '2022-05-30', 30, 5, 2022);
+
+-- DimDireccion
+INSERT INTO DimDireccion (ID_Direccion, Direccion, Ciudad, Codigo_Postal, Estado, Pais)
+VALUES
+(1, '123 Main St', 'San Francisco', '94101', 'CA', 'USA'),
+(2, '456 Oak St', 'Los Angeles', '90001', 'CA', 'USA'),
+(3, '789 Pine St', 'New York', '10001', 'NY', 'USA'),
+(4, '321 Cedar St', 'Seattle', '98101', 'WA', 'USA'),
+(5, '654 Elm St', 'Chicago', '60601', 'IL', 'USA');
+
+-- FactVentas
+INSERT INTO FactVentas (ID_FactVentas, ID_Cliente, ID_Producto, ID_Empleado, ID_Fecha, ID_Direccion_Facturacion, ID_Direccion_Envio, Cantidad, Precio_Unitario, Total)
+VALUES
+(1, 1, 1, 1, 1, 1, 1, 4, 13, 52),
+(2, 2, 2, 2, 2, 2, 2, 10, 108, 1080),
+(3, 3, 3, 3, 3, 3, 3, 12, 18, 216),
+(4, 4, 4, 4, 4, 4, 4, 6, 50, 300),
+(5, 5, 5, 5, 5, 5, 5, 5, 25, 125);
+
