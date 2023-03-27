@@ -1,0 +1,42 @@
+#include <stdio.h>
+
+int main() {
+  int cantidad[10], IVA, num_productos, i;
+  char codigo[10];
+  float precio[10], totalIva, subtotal, total;
+
+  printf("Ingrese el número de productos: ");
+  scanf("%d", &num_productos);
+
+  for (i = 0; i < num_productos; i++) {
+    printf("Ingrese la cantidad del producto %d: ", i + 1);
+    scanf("%d", &cantidad[i]);
+    printf("Ingrese el precio unitario del producto %d: ", i + 1);
+    scanf("%f", &precio[i]);
+    printf("Ingrese el código del producto %d: ", i + 1);
+    scanf(" %c", &codigo[i]);
+  }
+
+  printf("\nIVA: 12%% ");
+  IVA = 12;
+  subtotal = 0;
+
+  for (i = 0; i < num_productos; i++) {
+    subtotal += (float)cantidad[i] * precio[i];
+  }
+
+  totalIva = subtotal * (float)IVA / 100;
+  total = subtotal + totalIva;
+
+  printf("\n              Recibo de compra\n\n");
+  printf("Cantidad     Código   USD/Unidad     Total\n");
+
+  for (i = 0; i < num_productos; i++) {
+    printf("%5d         %c        %8.2f     %12.2f\n", cantidad[i], codigo[i], precio[i], (float)cantidad[i] * precio[i]);
+  }
+
+  printf("\n%28d%% IVA %12.2f\n\n", IVA, totalIva);
+  printf("                      TOTAL%14.2f\n", total);
+
+  return 0;
+}
