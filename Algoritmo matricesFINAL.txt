@@ -1,0 +1,129 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <cctype>
+
+bool esNumero(const std::string &s) {
+    for (const char &c : s) {
+        if (!isdigit(c)) {
+            return false;
+        }
+    }
+    return true;
+}
+
+int main() {
+    // Pedir al usuario que ingrese un número mayor a 2
+    std::string input;
+    int numero;
+    bool es_valido = false;
+
+    while (!es_valido) {
+        std::cout << "Por favor, ingrese un número mayor a 2: ";
+        std::cin >> input;
+
+        // Verificar si el caracter ingresado es un número
+        if (esNumero(input)) {
+            numero = std::stoi(input);
+            if (numero > 2) {
+                es_valido = true;
+            } else {
+                std::cout << "El número ingresado debe ser mayor a 2." << std::endl;
+            }
+        } else {
+            std::cout << "El caracter ingresado no es un número. Intente de nuevo." << std::endl;
+        }
+    }
+
+    std::vector<std::vector<int>> matriz_magica(numero, std::vector<int>(numero, 0));
+
+    if (numero % 2 == 1) {
+        int fila = numero / 2;
+        int columna = numero - 1;
+
+        for (int num = 1; num <= numero * numero;) {
+            if (fila == -1 && columna == numero) {
+                fila = 0;
+                columna = numero - 2;
+            } else {
+                if (columna == numero) {
+                    columna = 0;
+                }
+                if (fila < 0) {
+                    fila = numero - 1;
+                }
+            }
+            if (matriz_magica[fila][columna] != 0) {
+                columna -= 2;
+                fila++;
+                continue;
+            } else {
+                matriz_magica[fila][columna] = num++;
+            }
+            fila--;
+            columna++;
+        }
+    } else {
+        int div = numero / 4;
+        int mul = div * 3;
+
+        for (int i = 0; i < numero; i++) {
+            for (int j = 0; j < numero; j++) {
+                if ((i >= div && i < mul) && (j >= div && j < mul)) {
+                    matriz_magica[i][j] = (numero * numero + 1) - (i * numero + j + 1);
+                } else {
+                    matriz_magica[i][j] = i * numero + j + 1;
+                }
+            }
+        }
+    }
+
+    // Mostrar la matriz mágica
+    std::cout << "La matriz mágica cuadrada de tamaño " << numero << "x" << numero << " es:" << std::endl;
+    for (const auto &fila : matriz_magica) {
+        for (const auto &elemento : fila) {
+            std::cout << elemento << " ";
+        }
+        std::cout << std::endl;
+    }
+
+    // Comprobar las sumas de filas, columnas y diagonales
+    std::cout << "Comprobación de sumas:\n\n";
+
+    std::cout << "Filas:\n";
+    for (int i = 0; i < numero; i++) {
+        int suma_fila = 0;
+        for (int j = 0; j < numero; j++) {
+            suma_fila += matriz_magica[i][j];
+            std::cout << matriz_magica[i][j] << (j < numero - 1 ? " + " : " = ");
+        }
+        std::cout << suma_fila << std::endl;
+    }
+
+    std::cout << "\nColumnas:\n";
+    for (int i = 0; i < numero; i++) {
+        int suma_columna = 0;
+        for (int j = 0; j < numero; j++) {
+            suma_columna += matriz_magica[j][i];
+            std::cout << matriz_magica[j][i] << (j < numero - 1 ? " + " : " = ");
+        }
+        std::cout << suma_columna << std::endl;
+    }
+
+    std::cout << "\nDiagonales:\n";
+    int suma_diagonal1 = 0;
+    int suma_diagonal2 = 0;
+    for (int i = 0; i < numero; i++) {
+        suma_diagonal1 += matriz_magica[i][i];
+        suma_diagonal2 += matriz_magica[i][numero - i - 1];
+        std::cout << matriz_magica[i][i] << (i < numero - 1 ? " + " : " = ");
+    }
+    std::cout << suma_diagonal1 << std::endl;
+
+    for (int i = 0; i < numero; i++) {
+        std::cout << matriz_magica[i][numero - i - 1] << (i < numero - 1 ? " + " : " = ");
+    }
+    std::cout << suma_diagonal2 << std::endl;
+
+    return 0;
+}
