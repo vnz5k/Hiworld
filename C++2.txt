@@ -1,36 +1,89 @@
-#include <stdio.h>
-#include <stdbool.h>
+#include <iostream>
+#include <vector>
+#include <string>
+#include <cctype>
 
-#define MAX_SIZE 100
-
-int lista[MAX_SIZE];
-int anterior[MAX_SIZE];
-int siguiente[MAX_SIZE];
-int primero = -1;
-int ultimo = -1;
-int n = 0;
-
-void insertarNodo();
-void buscarNodo();
-void modificarNodo();
-void eliminarNodo();
-void desplegarListaPU();
-
-int main() {
-    // ... (código anterior, no se muestra para ahorrar espacio) ...
+bool esNumero(const std::string& s) {
+    for (const char &c : s) {
+        if (!isdigit(c)) {
+            return false;
+        }
+    }
+    return true;
 }
 
-// ... (funciones insertarNodo, buscarNodo, modificarNodo, eliminarNodo no se muestran para ahorrar espacio) ...
+std::vector<std::vector<int>> matrizMagicaImpar(int n) {
+    // Código para generar matriz mágica de orden impar
+}
 
-void desplegarListaPU() {
-    if (primero != -1) {
-        printf("\n Elemento | Anterior | Siguiente");
-        int actual = primero;
-        do {
-            printf("\n %8d | %8d | %8d", lista[actual], anterior[actual] + 1, siguiente[actual] + 1);
-            actual = siguiente[actual];
-        } while (actual != primero);
-    } else {
-        printf("\n La Lista se encuentra vacia\n\n");
+std::vector<std::vector<int>> matrizMagicaPar(int n) {
+    // Código para generar matriz mágica de orden par
+}
+
+void mostrarMatrizMagicaYComprobaciones(const std::vector<std::vector<int>>& matriz_magica, int numero) {
+    int suma_magica = (numero * (numero * numero + 1)) / 2;
+
+    std::cout << "La matriz mágica cuadrada de tamaño " << numero << "x" << numero << " es:" << std::endl;
+    for (const auto &fila : matriz_magica) {
+        for (const auto &elemento : fila) {
+            std::cout << elemento << " ";
+        }
+        std::cout << std::endl;
     }
+
+    std::cout << "\nComprobación de sumas:\n\n";
+    std::cout << "Suma mágica: " << suma_magica << "\n";
+
+    // Comprobar filas
+    std::cout << "\nFilas:\n";
+    for (int i = 0; i < numero; i++) {
+        int suma_fila = 0;
+        for (int j = 0; j < numero; j++) {
+            suma_fila += matriz_magica[i][j];
+            std::cout << matriz_magica[i][j] << (j < numero - 1 ? " + " : " ");
+        }
+        std::cout << "= " << suma_fila << (suma_fila == suma_magica ? " [Comprobado]" : "") << std::endl;
+    }
+
+    // Comprobar columnas
+    std::cout << "\nColumnas:\n";
+    for (int j = 0; j < numero; j++) {
+        int suma_columna = 0;
+        for (int i = 0; i < numero; i++) {
+            suma_columna += matriz_magica[i][j];
+            std::cout << matriz_magica[i][j] << (i < numero - 1 ? " + " : " ");
+        }
+        std::cout << "= " << suma_columna << (suma_columna == suma_magica ? " [Comprobado]" : "") << std::endl;
+    }
+
+    // Comprobar diagonales
+    std::cout << "\nDiagonales:\n";
+    int suma_diag1 = 0, suma_diag2 = 0;
+    for (int i = 0; i < numero; i++) {
+        suma_diag1 += matriz_magica[i][i];
+        suma_diag2 += matriz_magica[i][numero - 1 - i];
+        std::cout << matriz_magica[i][i] << (i < numero - 1 ? " + " : " ");
+    }
+    std::cout << "= " << suma_diag1 << (suma_diag1 == suma_magica ? " [Comprobado]" : "") << std::endl;
+    for (int i = 0; i < numero; i++) {
+        std::cout << matriz_magica[i][numero - 1 - i] << (i < numero - 1 ? " + " : " ");
+    }
+    std::cout << "= " << suma_diag2 << (suma_diag2 == suma_magica ? " [Comprobado]" : "") << std::endl;
+}
+
+int main() {
+    // Código para recibir el número de usuario y generar la matriz mágica
+    
+    // Luego, dependiendo del orden del número ingresado, se generará la matriz mágica usando el método apropiado
+    std::vector<std::vector<int>> matriz_magica;
+    if (numero % 2 == 1) {
+        matriz_magica = matrizMagicaImpar(numero);
+    } else {
+        matriz_magica = matrizMagicaPar(numero);
+    }
+
+    // Mostrar la matriz mágica y las comprobaciones de suma
+    mostrarMatrizMagicaYComprobaciones(matriz_magica, numero);
+
+    return 0;
 }
