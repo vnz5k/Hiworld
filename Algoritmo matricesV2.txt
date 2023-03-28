@@ -47,44 +47,29 @@ std::vector<std::vector<int>> matrizMagicaPar(int numero) {
     std::vector<std::vector<int>> matriz_magica(numero, std::vector<int>(numero, 0));
 
     if (numero % 4 == 0) {
-        int num = 1;
+        int k = 1;
+        int inv = numero * numero;
+
         for (int i = 0; i < numero; i++) {
             for (int j = 0; j < numero; j++) {
-                if ((i % 4 == j % 4) || (i % 4 == (j + 3) % 4)) {
-                    matriz_magica[i][j] = num;
+                if (((i % 4) / 2) == ((j % 4) / 2)) {
+                    matriz_magica[i][j] = k;
                 } else {
-                    matriz_magica[i][j] = numero * numero + 1 - num;
+                    matriz_magica[i][j] = inv;
                 }
-                num++;
+                k++;
+                inv--;
             }
         }
     } else {
-        int medio = numero / 2;
-        std::vector<std::vector<int>> matriz_medio = matrizMagicaImpar(medio);
-        for (int i = 0; i < medio; i++) {
-            for (int j = 0; j < medio; j++) {
-                matriz_magica[i][j] = matriz_medio[i][j];
-                matriz_magica[i + medio][j] = matriz_medio[i][j] + 3 * medio * medio;
-                matriz_magica[i][j + medio] = matriz_medio[i][j] + 2 * medio * medio;
-                matriz_magica[i + medio][j + medio] = matriz_medio[i][j] + medio * medio;
-            }
-        }
+        std::cout << "Advertencia: La matriz generada no será una matriz mágica cuadrada perfecta" << std::endl;
+        int n = numero / 2;
+        std::vector<std::vector<int>> submatriz = matrizMagicaImpar(n);
 
-        for (int i = 0; i < medio; i++) {
-            for (int j = 0; j < medio / 2; j++) {
-                if (i == medio / 2 && j == 0) continue;
-
-                int temp = matriz_magica[i][j];
-                matriz_magica[i][j] = matriz_magica[i + medio][j];
-                matriz_magica[i + medio][j] = temp;
-            }
-        }
-
-        for (int i = 0; i < medio; i++) {
-            for (int j = medio - 1; j < numero - medio / 2; j++) {
-                int temp = matriz_magica[i][j];
-                matriz_magica[i][j] = matriz_magica[i + medio][j];
-                matriz_magica[i + medio][j] = temp;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                matriz_magica[i][j] = submatriz[i][j];
+                matriz_magica[i + n][j + n] = submatriz[i][j] + n * n;
             }
         }
     }
@@ -100,7 +85,6 @@ int main() {
     while (!es_valido) {
         std::cout << "Por favor, ingrese un número mayor a 2: ";
         std::cin >> input;
-
         if (esNumero(input)) {
             numero = std::stoi(input);
             if (numero > 2) {
@@ -131,3 +115,4 @@ int main() {
 
     return 0;
 }
+
