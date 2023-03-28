@@ -44,32 +44,50 @@ std::vector<std::vector<int>> matrizMagicaImpar(int numero) {
 }
 
 std::vector<std::vector<int>> matrizMagicaPar(int numero) {
-    std::vector<std::vector<int>> matriz_magica(numero, std::vector<int>(numero));
-    int i, j;
+    std::vector<std::vector<int>> matriz_magica(numero, std::vector<int>(numero, 0));
 
-    for (i = 0; i < numero; i++)
-        for (j = 0; j < numero; j++)
-            matriz_magica[i][j] = (numero * i) + j + 1;
+    if (numero % 4 == 0) {
+        int num = 1;
+        for (int i = 0; i < numero; i++) {
+            for (int j = 0; j < numero; j++) {
+                if ((i % 4 == j % 4) || (i % 4 == (j + 3) % 4)) {
+                    matriz_magica[i][j] = num;
+                } else {
+                    matriz_magica[i][j] = numero * numero + 1 - num;
+                }
+                num++;
+            }
+        }
+    } else {
+        int medio = numero / 2;
+        std::vector<std::vector<int>> matriz_medio = matrizMagicaImpar(medio);
+        for (int i = 0; i < medio; i++) {
+            for (int j = 0; j < medio; j++) {
+                matriz_magica[i][j] = matriz_medio[i][j];
+                matriz_magica[i + medio][j] = matriz_medio[i][j] + 3 * medio * medio;
+                matriz_magica[i][j + medio] = matriz_medio[i][j] + 2 * medio * medio;
+                matriz_magica[i + medio][j + medio] = matriz_medio[i][j] + medio * medio;
+            }
+        }
 
-    for (i = 0; i < numero / 4; i++)
-        for (j = 0; j < numero / 4; j++)
-            matriz_magica[i][j] = (numero * j) + i + 1;
+        for (int i = 0; i < medio; i++) {
+            for (int j = 0; j < medio / 2; j++) {
+                if (i == medio / 2 && j == 0) continue;
 
-    for (i = 0; i < numero / 4; i++)
-        for (j = 3 * (numero / 4); j < numero; j++)
-            matriz_magica[i][j] = (numero * j) + i + 1;
+                int temp = matriz_magica[i][j];
+                matriz_magica[i][j] = matriz_magica[i + medio][j];
+                matriz_magica[i + medio][j] = temp;
+            }
+        }
 
-    for (i = 3 * numero / 4; i < numero; i++)
-        for (j = 0; j < numero / 4; j++)
-            matriz_magica[i][j] = (numero * j) + i + 1;
-
-    for (i = 3 * numero / 4; i < numero; i++)
-        for (j = 3 * numero / 4; j < numero; j++)
-            matriz_magica[i][j] = (numero * j) + i + 1;
-
-    for (i = numero / 4; i < 3 * numero / 4; i++)
-        for (j = numero / 4; j < 3 * numero / 4; j++)
-            matriz_magica[i][j] = (numero * j) + i + 1;
+        for (int i = 0; i < medio; i++) {
+            for (int j = medio - 1; j < numero - medio / 2; j++) {
+                int temp = matriz_magica[i][j];
+                matriz_magica[i][j] = matriz_magica[i + medio][j];
+                matriz_magica[i + medio][j] = temp;
+            }
+        }
+    }
 
     return matriz_magica;
 }
