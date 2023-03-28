@@ -1,0 +1,67 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <cctype>
+
+// Función para verificar si el string ingresado es un número
+bool esNumero(const std::string& s) {
+    for (const char &c : s) {
+        if (!isdigit(c)) {
+            return false;
+        }
+    }
+    return true;
+}
+
+// Función para generar matriz mágica de orden impar
+std::vector<std::vector<int>> matrizMagicaImpar(int numero) {
+    // (Aquí va el código de la función matrizMagicaImpar que ya te proporcioné)
+}
+
+// Función para generar matriz mágica de orden par
+std::vector<std::vector<int>> matrizMagicaPar(int numero) {
+    // (Aquí va el código de la función matrizMagicaPar que ya te proporcioné)
+}
+
+// Función para mostrar matriz mágica y realizar comprobaciones de sumas
+void mostrarMatrizMagicaYComprobaciones(const std::vector<std::vector<int>> &matriz_magica, int numero) {
+    // (Aquí va el código de la función mostrarMatrizMagicaYComprobaciones que ya te proporcioné)
+}
+
+int main() {
+    // Pedir al usuario que ingrese un número mayor a 2
+    std::string input;
+    int numero;
+    bool es_valido = false;
+
+    // Solicitar al usuario el número y verificar que sea válido
+    while (!es_valido) {
+        std::cout << "Por favor, ingrese un número mayor a 2: ";
+        std::cin >> input;
+
+        // Verificar si el caracter ingresado es un número
+        if (esNumero(input)) {
+            numero = std::stoi(input);
+            if (numero > 2) {
+                es_valido = true;
+            } else {
+                std::cout << "El número ingresado debe ser mayor a 2." << std::endl;
+            }
+        } else {
+            std::cout << "El caracter ingresado no es un número. Intente de nuevo." << std::endl;
+        }
+    }
+
+    // Luego, dependiendo del orden del número ingresado, se generará la matriz mágica usando el método apropiado
+    std::vector<std::vector<int>> matriz_magica;
+    if (numero % 2 == 1) {
+        matriz_magica = matrizMagicaImpar(numero);
+    } else {
+        matriz_magica = matrizMagicaPar(numero);
+    }
+
+    // Mostrar la matriz mágica y las comprobaciones de suma
+    mostrarMatrizMagicaYComprobaciones(matriz_magica, numero);
+
+    return 0;
+}
