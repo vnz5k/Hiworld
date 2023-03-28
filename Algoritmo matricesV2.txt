@@ -47,31 +47,20 @@ std::vector<std::vector<int>> matrizMagicaPar(int numero) {
     std::vector<std::vector<int>> matriz_magica(numero, std::vector<int>(numero, 0));
 
     if (numero % 4 == 0) {
-        int k = 1;
-        int inv = numero * numero;
-
+        int n = 1;
         for (int i = 0; i < numero; i++) {
             for (int j = 0; j < numero; j++) {
-                if (((i % 4) / 2) == ((j % 4) / 2)) {
-                    matriz_magica[i][j] = k;
+                if ((((i + 1) / 2) % 2) == (((j + 1) / 2) % 2)) {
+                    matriz_magica[i][j] = n;
                 } else {
-                    matriz_magica[i][j] = inv;
+                    matriz_magica[i][j] = numero * numero - n + 1;
                 }
-                k++;
-                inv--;
+                n++;
             }
         }
     } else {
-        std::cout << "Advertencia: La matriz generada no será una matriz mágica cuadrada perfecta" << std::endl;
-        int n = numero / 2;
-        std::vector<std::vector<int>> submatriz = matrizMagicaImpar(n);
-
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                matriz_magica[i][j] = submatriz[i][j];
-                matriz_magica[i + n][j + n] = submatriz[i][j] + n * n;
-            }
-        }
+        // No se genera una matriz mágica cuadrada perfecta para números pares que no son múltiplos de 4.
+        std::cout << "Advertencia: No se puede generar una matriz mágica cuadrada perfecta para números pares que no son múltiplos de 4." << std::endl;
     }
 
     return matriz_magica;
@@ -85,6 +74,7 @@ int main() {
     while (!es_valido) {
         std::cout << "Por favor, ingrese un número mayor a 2: ";
         std::cin >> input;
+
         if (esNumero(input)) {
             numero = std::stoi(input);
             if (numero > 2) {
@@ -100,6 +90,7 @@ int main() {
     std::vector<std::vector<int>> matriz_magica;
 
     if (numero % 2 == 1) {
+
         matriz_magica = matrizMagicaImpar(numero);
     } else {
         matriz_magica = matrizMagicaPar(numero);
@@ -115,4 +106,3 @@ int main() {
 
     return 0;
 }
-
