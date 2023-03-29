@@ -1,0 +1,34 @@
+<?php
+// 1. Calcular el sueldo de un trabajador
+// Aquí definimos las variables para la tasa por hora y las horas trabajadas.
+$tasa_por_hora = 90;
+$horas_trabajadas = 40; // 5 días x 8 horas/día
+
+// Aquí multiplicamos la tasa por hora por las horas trabajadas para obtener el sueldo total.
+$sueldo = $tasa_por_hora * $horas_trabajadas;
+
+// Aquí imprimimos el resultado en la pantalla.
+echo "El sueldo del trabajador es: " . $sueldo . " soles. <br>";
+
+// 2. Tabla de multiplicar del número 8
+// Aquí definimos la variable del número que queremos multiplicar.
+$numero = 8;
+echo "Tabla de multiplicar del número 8:<br>";
+
+// Utilizamos un bucle for para iterar desde 1 hasta 10 y realizar las multiplicaciones.
+for ($i = 1; $i <= 10; $i++) {
+    echo $numero . " x " . $i . " = " . ($numero * $i) . "<br>";
+}
+
+// 3. Determinar si un número entero positivo es par o impar
+// Aquí definimos la variable del número entero positivo que queremos evaluar.
+$numero_ent_pos = 27;
+echo "Número entero positivo: " . $numero_ent_pos . "<br>";
+
+// Utilizamos una condición if para verificar si el número es divisible por 2 (par) o no (impar).
+if ($numero_ent_pos % 2 == 0) {
+    echo "El número " . $numero_ent_pos . " es par.<br>";
+} else {
+    echo "El número " . $numero_ent_pos . " es impar.<br>";
+}
+?>
