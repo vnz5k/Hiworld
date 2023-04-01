@@ -1,0 +1,43 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <cctype>
+#include <algorithm>
+
+// ...
+
+// Función para ordenar los elementos de la matriz de menor a mayor
+void ordenarMatriz(std::vector<std::vector<int>>& matriz) {
+    int n = matriz.size();
+    for (int i = 0; i < n * n - 1; i++) {
+        int min_idx = i;
+        for (int j = i + 1; j < n * n; j++) {
+            if (matriz[j / n][j % n] < matriz[min_idx / n][min_idx % n]) {
+                min_idx = j;
+            }
+        }
+        if (min_idx != i) {
+            std::swap(matriz[i / n][i % n], matriz[min_idx / n][min_idx % n]);
+        }
+    }
+}
+
+int main() {
+    // ...
+
+    // Luego, dependiendo del orden del número ingresado, se generará la matriz mágica usando el método apropiado
+    std::vector<std::vector<int>> matriz_magica;
+    if (numero % 2 == 1) {
+        matriz_magica = matrizMagicaImpar(numero);
+    } else {
+        matriz_magica = matrizMagicaPar(numero);
+    }
+
+    // Ordenar los elementos de la matriz de menor a mayor
+    ordenarMatriz(matriz_magica);
+
+    // Mostrar la matriz mágica y las comprobaciones de suma
+    mostrarMatrizMagicaYComprobaciones(matriz_magica, numero);
+
+    return 0;
+}
